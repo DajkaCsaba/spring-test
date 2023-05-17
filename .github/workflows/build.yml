@@ -1,7 +1,9 @@
-name: Java CI with Maven
+name: Java CI with Gradle
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
 
 jobs:
@@ -17,11 +19,14 @@ jobs:
           java-version: "11"
           distribution: "adopt"
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: Upload artifact
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Save build artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: spring-test
-          path: target/spring-test.jar
+          name: build-output
+          path: build/libs/
